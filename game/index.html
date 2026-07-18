@@ -1,1 +1,625 @@
-<h2>Development paused :(</h2>
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-original-url="https://zongocong.github.io" data-pub="Oskars Zihmanis, https://oskarszihmanis.neocities.org" data-other-tags="game, developer, https://oskarszihmanis.neocities.org, zongocong, ZongoCong">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta property="og:url" content="https://zongocong.github.io">
+    <meta name="author" content="Oskars Zihmanis, https://oskarszihmanis.github.io">
+
+<!--Last Updated at 16:28 EEST, Latvia 18.07.2026-->
+
+    <title>ZongoCong – Tamagotchi</title>
+
+<style>
+footer{text-align: center; color: black;
+font-family: cursive;}
+body{background-color: #E1ED78; font-family: cursive;}
+.image{height: 40px; width: auto; border: 1px solid gray;
+color: gray; /*Add color gray for the text if the fallback url for the image fails*/}
+.hr1{border: 4px solid black; border-radius: 23px;}
+.playIcon{color: gray; /*Add color gray for the text if the fallback url for the image fails*/
+height: 254px; width: auto; justify-items: center; max-height: 100%; max-width: 100%; 
+display: flex; justify-content: center; align-items: center; mix-blend-mode: multiply;}
+</style>
+  </head>
+  <body>
+
+<div class="playIcon" id="playicon" style="height:auto; mix-blend-mode:normal;">
+
+  <!-- ─── GAME CONTAINER ─── -->
+  <div style="width:100%; max-width:460px; background:rgba(255,252,235,0.85); border-radius:30px; padding:16px 14px 18px; backdrop-filter:blur(4px); box-shadow:inset 0 0 0 2px #b8c86a; display:flex; flex-direction:column; align-items:center; font-family:'Courier New',monospace; color:#1a2a1a;">
+
+    <!-- Name row -->
+    <div style="display:flex; align-items:center; gap:6px; width:100%; max-width:280px; font-size:0.75rem; font-weight:700; margin-bottom:4px;">
+      <span>🏷️</span>
+      <input type="text" id="petNameInput" maxlength="12" spellcheck="false" style="background:transparent; border:none; border-bottom:2px dotted rgba(0,40,0,0.2); font-family:'Courier New',monospace; font-weight:700; font-size:0.75rem; color:#1a3a1a; outline:none; width:80px; padding:0 2px;">
+      <button id="editNameBtn" style="background:none; border:none; cursor:pointer; font-size:0.6rem; opacity:0.5; color:inherit; font-family:inherit;">✎</button>
+      <span style="margin-left:auto; font-size:0.6rem; opacity:0.6;">🎂 <span id="ageDisplay">0</span>d</span>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="petCanvas" width="280" height="280" style="display:block; width:100%; max-width:280px; height:auto; aspect-ratio:1/1; image-rendering:pixelated; border-radius:16px; background:#7ba87a; box-shadow:inset 0 -4px 0 #3a5a3a, inset 0 4px 12px rgba(0,0,0,0.2); cursor:pointer; flex-shrink:0;"></canvas>
+
+    <!-- Stats -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px 12px; width:100%; max-width:280px; margin-top:6px; font-size:0.6rem; font-weight:700; color:#1a3a1a;">
+      <div style="display:flex; align-items:center; gap:4px;"><span>🍖</span><span style="flex:1; height:8px; background:rgba(0,0,0,0.2); border-radius:20px; overflow:hidden; min-width:20px;"><span id="hungerBar" style="display:block; height:100%; width:80%; border-radius:20px; background:linear-gradient(90deg,#8a7a2a,#c4a840); transition:width 0.5s;"></span></span><span id="hungerVal" style="min-width:22px; text-align:right; font-size:0.55rem; opacity:0.7;">80</span></div>
+      <div style="display:flex; align-items:center; gap:4px;"><span>😊</span><span style="flex:1; height:8px; background:rgba(0,0,0,0.2); border-radius:20px; overflow:hidden; min-width:20px;"><span id="happyBar" style="display:block; height:100%; width:70%; border-radius:20px; background:linear-gradient(90deg,#a04050,#d06070); transition:width 0.5s;"></span></span><span id="happyVal" style="min-width:22px; text-align:right; font-size:0.55rem; opacity:0.7;">70</span></div>
+      <div style="display:flex; align-items:center; gap:4px;"><span>⚡</span><span style="flex:1; height:8px; background:rgba(0,0,0,0.2); border-radius:20px; overflow:hidden; min-width:20px;"><span id="energyBar" style="display:block; height:100%; width:80%; border-radius:20px; background:linear-gradient(90deg,#2a6a7a,#40a0b0); transition:width 0.5s;"></span></span><span id="energyVal" style="min-width:22px; text-align:right; font-size:0.55rem; opacity:0.7;">80</span></div>
+      <div style="display:flex; align-items:center; gap:4px;"><span>❤️</span><span style="flex:1; height:8px; background:rgba(0,0,0,0.2); border-radius:20px; overflow:hidden; min-width:20px;"><span id="healthBar" style="display:block; height:100%; width:100%; border-radius:20px; background:linear-gradient(90deg,#2a7a3a,#40b050); transition:width 0.5s;"></span></span><span id="healthVal" style="min-width:22px; text-align:right; font-size:0.55rem; opacity:0.7;">100</span></div>
+    </div>
+
+    <!-- Message -->
+    <div style="font-size:0.65rem; font-weight:700; margin-top:4px; background:rgba(0,0,0,0.08); padding:2px 14px; border-radius:40px; width:100%; max-width:280px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#1a3a1a;" id="msgLine">
+      <span id="msgEmoji">👋</span> <span id="msgText">Hello, Zongocong!</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; width:100%; max-width:280px; margin-top:6px;">
+      <button id="btnFeed" style="background:#8a7a5a; border:none; border-radius:30px; padding:4px 2px; font-size:0.55rem; font-weight:700; color:#e8dcc0; cursor:pointer; box-shadow:0 3px 0 #3a2a1a; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; line-height:1.2; transition:0.05s linear;"><span style="font-size:1.2rem;">🍎</span>Feed</button>
+      <button id="btnPlay" style="background:#8a7a5a; border:none; border-radius:30px; padding:4px 2px; font-size:0.55rem; font-weight:700; color:#e8dcc0; cursor:pointer; box-shadow:0 3px 0 #3a2a1a; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; line-height:1.2; transition:0.05s linear;"><span style="font-size:1.2rem;">🎮</span>Play</button>
+      <button id="btnSleep" style="background:#8a7a5a; border:none; border-radius:30px; padding:4px 2px; font-size:0.55rem; font-weight:700; color:#e8dcc0; cursor:pointer; box-shadow:0 3px 0 #3a2a1a; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; line-height:1.2; transition:0.05s linear;"><span style="font-size:1.2rem;">💤</span>Sleep</button>
+      <button id="btnClean" style="background:#8a7a5a; border:none; border-radius:30px; padding:4px 2px; font-size:0.55rem; font-weight:700; color:#e8dcc0; cursor:pointer; box-shadow:0 3px 0 #3a2a1a; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; line-height:1.2; transition:0.05s linear;"><span style="font-size:1.2rem;">🧹</span>Clean</button>
+    </div>
+
+    <!-- Reset -->
+    <button id="btnReset" style="background:none; border:1px solid rgba(0,40,0,0.1); border-radius:20px; padding:1px 12px; font-family:'Courier New',monospace; font-size:0.5rem; font-weight:700; color:#1a3a1a; cursor:pointer; background:rgba(0,0,0,0.04); margin-top:4px;">↻ New Life</button>
+
+    <!-- Death Overlay -->
+    <div id="deathOverlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.65); border-radius:30px; flex-direction:column; align-items:center; justify-content:center; color:#d4c8b0; font-family:'Courier New',monospace; backdrop-filter:blur(3px); z-index:10;">
+      <h2 style="font-size:1.8rem; color:#e8dcc0; margin:0;">💔</h2>
+      <p style="font-size:0.8rem; opacity:0.8; margin:4px 0 10px;">Zongocong has passed...</p>
+      <button id="btnResetDeath" style="background:#8a3a2a; border:none; padding:6px 24px; border-radius:30px; color:#e8dcc0; font-weight:700; font-family:'Courier New',monospace; cursor:pointer; box-shadow:0 3px 0 #3a1a10; transition:0.05s linear;">🔄 New Life</button>
+    </div>
+
+    <style>
+      #playicon>div { position: relative; }
+      #deathOverlay.show { display: flex; }
+    </style>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── DOM refs ──
+  const canvas = document.getElementById('petCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 280, H = 280;
+
+  const hungerBar = document.getElementById('hungerBar');
+  const happyBar = document.getElementById('happyBar');
+  const energyBar = document.getElementById('energyBar');
+  const healthBar = document.getElementById('healthBar');
+  const hungerVal = document.getElementById('hungerVal');
+  const happyVal = document.getElementById('happyVal');
+  const energyVal = document.getElementById('energyVal');
+  const healthVal = document.getElementById('healthVal');
+  const ageDisplay = document.getElementById('ageDisplay');
+  const msgText = document.getElementById('msgText');
+  const msgEmoji = document.getElementById('msgEmoji');
+  const petNameInput = document.getElementById('petNameInput');
+  const editNameBtn = document.getElementById('editNameBtn');
+  const deathOverlay = document.getElementById('deathOverlay');
+  const btnFeed = document.getElementById('btnFeed');
+  const btnPlay = document.getElementById('btnPlay');
+  const btnSleep = document.getElementById('btnSleep');
+  const btnClean = document.getElementById('btnClean');
+  const btnReset = document.getElementById('btnReset');
+  const btnResetDeath = document.getElementById('btnResetDeath');
+
+  // ── Constants ──
+  const STORAGE_KEY = 'zongocong_data';
+  const MAX_STAT = 100;
+  const MIN_STAT = 0;
+  const DECAY_RATE = 0.12;
+  const TICK_MS = 1800;
+  const COOLDOWN_MS = 600;
+  const SAVE_INTERVAL_MS = 5000;
+
+  // ── Default state ──
+  const DEFAULT_STATE = {
+    hunger: 80, happiness: 70, energy: 80, health: 100,
+    age: 0, alive: true, isSleeping: false, actionCooldown: 0,
+    blinkTimer: 0, isBlinking: false, eyeOpen: 1, bodyBob: 0,
+    petState: 'idle', stateTimer: 0, particles: [], name: 'Zongocong'
+  };
+
+  let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+  // ── Helpers ──
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+  function rand(a, b) { return Math.random() * (b - a) + a; }
+  function randInt(a, b) { return Math.floor(rand(a, b + 1)); }
+
+  // ── Save / Load ──
+  function saveGame() {
+    try {
+      const data = {
+        hunger: state.hunger, happiness: state.happiness,
+        energy: state.energy, health: state.health,
+        age: state.age, alive: state.alive,
+        isSleeping: state.isSleeping, name: state.name || 'Zongocong'
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch(e) {}
+  }
+
+  function loadGame() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      state.hunger = data.hunger ?? DEFAULT_STATE.hunger;
+      state.happiness = data.happiness ?? DEFAULT_STATE.happiness;
+      state.energy = data.energy ?? DEFAULT_STATE.energy;
+      state.health = data.health ?? DEFAULT_STATE.health;
+      state.age = data.age ?? DEFAULT_STATE.age;
+      state.alive = data.alive ?? DEFAULT_STATE.alive;
+      state.isSleeping = data.isSleeping ?? DEFAULT_STATE.isSleeping;
+      state.name = data.name || 'Zongocong';
+      state.hunger = clamp(state.hunger, 0, 100);
+      state.happiness = clamp(state.happiness, 0, 100);
+      state.energy = clamp(state.energy, 0, 100);
+      state.health = clamp(state.health, 0, 100);
+      if (!state.alive) deathOverlay.classList.add('show');
+      else deathOverlay.classList.remove('show');
+      return true;
+    } catch(e) { return false; }
+  }
+
+  function resetToDefault() {
+    state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    state.name = 'Zongocong';
+    state.alive = true;
+    state.particles = [];
+    state.isSleeping = false;
+    state.actionCooldown = 0;
+    state.blinkTimer = 0;
+    state.isBlinking = false;
+    state.eyeOpen = 1;
+    state.bodyBob = 0;
+    state.petState = 'idle';
+    state.stateTimer = 0;
+    deathOverlay.classList.remove('show');
+    updateUI();
+    drawPet();
+    setMessage('A new life begins! 🌱', '🌟');
+    saveGame();
+  }
+
+  // ── UI update ──
+  function updateUI() {
+    const h = state.hunger, ha = state.happiness, e = state.energy, he = state.health;
+    hungerBar.style.width = h + '%';
+    happyBar.style.width = ha + '%';
+    energyBar.style.width = e + '%';
+    healthBar.style.width = he + '%';
+    hungerVal.textContent = Math.round(h);
+    happyVal.textContent = Math.round(ha);
+    energyVal.textContent = Math.round(e);
+    healthVal.textContent = Math.round(he);
+    ageDisplay.textContent = state.age;
+    petNameInput.value = state.name || 'Zongocong';
+  }
+
+  function setMessage(text, emoji) {
+    msgText.textContent = text;
+    msgEmoji.textContent = emoji || '💬';
+  }
+
+  // ── Mood ──
+  function getMood() {
+    const { hunger, happiness, energy, health } = state;
+    if (health <= 20) return { mood: 'sick', emoji: '🤒' };
+    if (hunger <= 15) return { mood: 'hungry', emoji: '🍽️' };
+    if (energy <= 15) return { mood: 'tired', emoji: '😴' };
+    if (happiness <= 20) return { mood: 'sad', emoji: '😢' };
+    if (hunger >= 75 && happiness >= 70 && energy >= 60) return { mood: 'happy', emoji: '🥰' };
+    return { mood: 'neutral', emoji: '😊' };
+  }
+
+  // ── Draw (pixel/retro style) ──
+  function drawPet() {
+    ctx.clearRect(0, 0, W, H);
+
+    const mood = getMood();
+    const { hunger, happiness, energy, health, isSleeping, bodyBob } = state;
+
+    // subtle grid
+    ctx.fillStyle = 'rgba(60,100,60,0.04)';
+    for (let x = 0; x < W; x += 6) {
+      for (let y = 0; y < H; y += 6) {
+        if ((Math.floor(x / 6) + Math.floor(y / 6)) % 2 === 0) {
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+
+    const bob = Math.sin(bodyBob) * 1.8;
+    const cx = 140, cy = 145 + bob;
+
+    let bodyColor = '#7aaa7a', accentColor = '#5a8a5a', darkAccent = '#3a6a3a', cheekColor = 'rgba(200,120,120,0.25)';
+    if (mood.mood === 'happy') { bodyColor = '#c4b060'; accentColor = '#a89040'; darkAccent = '#887030'; cheekColor = 'rgba(220,150,130,0.30)'; }
+    if (mood.mood === 'sad') { bodyColor = '#8a9a8a'; accentColor = '#6a7a6a'; darkAccent = '#4a5a4a'; cheekColor = 'rgba(160,160,180,0.12)'; }
+    if (mood.mood === 'hungry') { bodyColor = '#b89840'; accentColor = '#9a7a30'; darkAccent = '#7a5a20'; cheekColor = 'rgba(220,180,100,0.25)'; }
+    if (mood.mood === 'tired') { bodyColor = '#6a8a7a'; accentColor = '#4a6a5a'; darkAccent = '#2a4a3a'; cheekColor = 'rgba(140,180,180,0.15)'; }
+    if (mood.mood === 'sick') { bodyColor = '#8aaa7a'; accentColor = '#6a8a5a'; darkAccent = '#4a6a3a'; cheekColor = 'rgba(180,210,170,0.15)'; }
+    if (health <= 30) { bodyColor = '#a08070'; accentColor = '#806050'; darkAccent = '#604030'; }
+
+    ctx.shadowColor = 'rgba(0,0,0,0.06)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 4;
+    const bw = 130, bh = 124;
+    ctx.beginPath(); ctx.ellipse(cx, cy + 10, bw/2, bh/2, 0, 0, Math.PI * 2);
+    ctx.shadowColor = 'rgba(0,0,0,0.05)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 5;
+    const grad = ctx.createRadialGradient(cx - 14, cy - 14, 14, cx, cy, bw/2);
+    grad.addColorStop(0, lighten(bodyColor, 30));
+    grad.addColorStop(0.6, bodyColor);
+    grad.addColorStop(1, accentColor);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    ctx.strokeStyle = darkAccent; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // belly
+    ctx.beginPath(); ctx.ellipse(cx - 4, cy + 16, 42, 34, 0.08, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(200,220,180,0.08)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(40,70,40,0.05)'; ctx.lineWidth = 1; ctx.stroke();
+
+    // cheeks
+    for (let side = -1; side <= 1; side += 2) {
+      ctx.beginPath(); ctx.ellipse(cx + side * 42, cy + 30, 18, 12, 0, 0, Math.PI * 2);
+      ctx.fillStyle = cheekColor; ctx.fill();
+    }
+
+    // eyes
+    const eyeY = cy - 2 + (isSleeping ? 8 : 0);
+    const eyeSpacing = 34, eyeR = 17, pupilR = 8;
+    const blink = state.isBlinking ? 0 : state.eyeOpen;
+    for (let side = -1; side <= 1; side += 2) {
+      const ex = cx + side * eyeSpacing, ey = eyeY;
+      const rx = eyeR, ry = eyeR * (0.3 + 0.7 * blink);
+      ctx.shadowColor = 'rgba(0,0,0,0.03)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+      ctx.beginPath(); ctx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#d4e8d4'; ctx.fill();
+      ctx.strokeStyle = '#4a6a4a'; ctx.lineWidth = 1.2; ctx.stroke();
+      if (blink > 0.1) {
+        ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+        ctx.beginPath(); ctx.arc(ex + side * 2, ey + 2, pupilR * blink, 0, Math.PI * 2);
+        ctx.fillStyle = '#1a3a1a'; ctx.fill();
+        ctx.beginPath(); ctx.arc(ex + side * 6, ey - 3, 3.5 * blink, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,240,200,0.3)'; ctx.fill();
+      }
+    }
+
+    // mouth
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+    const mouthY = cy + 32 + (isSleeping ? 4 : 0);
+    ctx.strokeStyle = '#2a3a2a'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    if (isSleeping) {
+      ctx.beginPath(); ctx.arc(cx, mouthY + 2, 4, 0, Math.PI * 2);
+      ctx.strokeStyle = '#3a4a3a'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.font = '14px "Courier New", monospace';
+      ctx.fillStyle = 'rgba(40,80,40,0.2)';
+      ctx.fillText('Z', cx + 36, mouthY - 18);
+      ctx.fillText('z', cx + 42, mouthY - 28);
+    } else if (mood.mood === 'happy') {
+      ctx.beginPath(); ctx.arc(cx, mouthY - 2, 12, 0.08, Math.PI - 0.08); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx + 2, mouthY + 6, 6, 0, Math.PI); ctx.fillStyle = '#b06060'; ctx.fill();
+    } else if (mood.mood === 'sad') {
+      ctx.beginPath(); ctx.arc(cx, mouthY + 8, 10, Math.PI + 0.2, 2 * Math.PI - 0.2); ctx.stroke();
+    } else if (mood.mood === 'hungry') {
+      ctx.beginPath(); ctx.ellipse(cx, mouthY + 2, 8, 10, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#3a2a1a'; ctx.fill();
+      ctx.strokeStyle = '#2a1a0a'; ctx.lineWidth = 1.2; ctx.stroke();
+    } else if (mood.mood === 'sick') {
+      ctx.beginPath(); ctx.arc(cx, mouthY + 2, 6, 0.2, Math.PI - 0.2); ctx.stroke();
+      ctx.font = '14px "Courier New", monospace';
+      ctx.fillStyle = 'rgba(60,160,200,0.2)';
+      ctx.fillText('~', cx + 26, mouthY - 10);
+    } else {
+      ctx.beginPath(); ctx.arc(cx, mouthY, 8, 0.15, Math.PI - 0.15); ctx.stroke();
+    }
+
+    // antennae
+    ctx.shadowColor = 'rgba(0,0,0,0.03)'; ctx.shadowBlur = 5; ctx.shadowOffsetY = 2;
+    ctx.strokeStyle = darkAccent; ctx.lineWidth = 3.5;
+    for (let side = -1; side <= 1; side += 2) {
+      const ax = cx + side * 26, ay = cy - 40 + bob * 0.4;
+      ctx.beginPath(); ctx.moveTo(ax, ay);
+      ctx.quadraticCurveTo(ax + side * 8, ay - 26, ax + side * 12, ay - 38);
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(ax + side * 12, ay - 38, 7, 0, Math.PI * 2);
+      ctx.fillStyle = bodyColor; ctx.fill();
+      ctx.strokeStyle = darkAccent; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(ax + side * 12, ay - 38, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,240,200,0.12)'; ctx.fill();
+    }
+
+    // arms
+    ctx.shadowColor = 'rgba(0,0,0,0.03)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
+    const armY = cy + 22 + bob * 0.3;
+    for (let side = -1; side <= 1; side += 2) {
+      const ax = cx + side * 62, ay = armY;
+      const angle = state.petState === 'playing' ? 0.5 * side : 0.15 * side;
+      ctx.beginPath(); ctx.ellipse(ax + side * 3, ay + 8, 12, 8, angle, 0, Math.PI * 2);
+      ctx.fillStyle = accentColor; ctx.fill();
+      ctx.strokeStyle = darkAccent; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.beginPath(); ctx.arc(ax + side * 14, ay + 14, 5, 0, Math.PI * 2);
+      ctx.fillStyle = bodyColor; ctx.fill();
+      ctx.stroke();
+    }
+
+    // legs
+    ctx.shadowColor = 'rgba(0,0,0,0.05)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4;
+    const legY = cy + 58 + bob * 0.4;
+    for (let side = -1; side <= 1; side += 2) {
+      const lx = cx + side * 26;
+      ctx.beginPath(); ctx.ellipse(lx, legY + 4, 14, 10, 0, 0, Math.PI * 2);
+      ctx.fillStyle = accentColor; ctx.fill();
+      ctx.strokeStyle = darkAccent; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(lx + side * 3, legY + 12, 8, 5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = bodyColor; ctx.fill();
+      ctx.stroke();
+    }
+
+    // sparkles
+    if (mood.mood === 'happy') {
+      ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+      ctx.font = '12px "Courier New", monospace';
+      const sparkles = ['✦', '✧', '★'];
+      for (let i = 0; i < 3; i++) {
+        const sx = cx - 64 + i * 30 + Math.sin(Date.now() / 700 + i * 2) * 6;
+        const sy = cy - 46 + i * 14 + Math.cos(Date.now() / 500 + i * 1.5) * 4;
+        ctx.fillStyle = 'rgba(180,200,120,0.2)';
+        ctx.fillText(sparkles[i % sparkles.length], sx, sy);
+      }
+    }
+
+    // particles
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+    for (const p of state.particles) {
+      ctx.globalAlpha = p.life * 0.5;
+      ctx.fillStyle = p.color;
+      const sz = Math.max(1, p.size);
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), Math.round(sz), Math.round(sz));
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  }
+
+  function lighten(hex, amt) {
+    let r = parseInt(hex.slice(1,2),16)*17 || parseInt(hex.slice(1,3),16);
+    let g = parseInt(hex.slice(2,3),16)*17 || parseInt(hex.slice(3,5),16);
+    let b = parseInt(hex.slice(3,4),16)*17 || parseInt(hex.slice(5,7),16);
+    if (hex.length === 7) { r = parseInt(hex.slice(1,3),16); g = parseInt(hex.slice(3,5),16); b = parseInt(hex.slice(5,7),16); }
+    r = Math.min(255, r + amt); g = Math.min(255, g + amt); b = Math.min(255, b + amt);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  // ── Particles ──
+  function spawnParticles(x, y, color, count) {
+    count = count || 10;
+    for (let i = 0; i < count; i++) {
+      state.particles.push({
+        x: x + rand(-5,5), y: y + rand(-5,5),
+        vx: rand(-2,2), vy: rand(-3,0.8),
+        size: rand(2.5,6), life: 1,
+        decay: rand(0.018,0.04), color: color
+      });
+    }
+  }
+
+  function updateParticles() {
+    for (let i = state.particles.length - 1; i >= 0; i--) {
+      const p = state.particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.06;
+      p.life -= p.decay; p.size *= 0.995;
+      if (p.life <= 0 || p.size < 0.5) state.particles.splice(i, 1);
+    }
+    if (state.particles.length > 80) state.particles.splice(0, 20);
+  }
+
+  // ── Actions ──
+  function doAction(type) {
+    if (!state.alive) return;
+    if (state.actionCooldown > 0) return;
+    if (state.isSleeping && type !== 'sleep') {
+      setMessage('Zongocong is sleeping... 💤', '😴');
+      return;
+    }
+    state.actionCooldown = 1;
+
+    switch (type) {
+      case 'feed':
+        state.hunger = clamp(state.hunger + 22, 0, 100);
+        state.happiness = clamp(state.happiness + 4, 0, 100);
+        state.energy = clamp(state.energy - 6, 0, 100);
+        setMessage('Yummy! 🍎', '😋');
+        spawnParticles(140, 156, '#c4a040', 14);
+        state.petState = 'eating'; state.stateTimer = 25;
+        break;
+      case 'play':
+        state.happiness = clamp(state.happiness + 20, 0, 100);
+        state.hunger = clamp(state.hunger - 8, 0, 100);
+        state.energy = clamp(state.energy - 14, 0, 100);
+        setMessage('So fun! 🎉', '🤩');
+        spawnParticles(140, 132, '#c06070', 18);
+        state.petState = 'playing'; state.stateTimer = 35;
+        break;
+      case 'sleep':
+        if (state.isSleeping) {
+          setMessage('Already sleeping... 💤', '😴');
+          return;
+        }
+        state.isSleeping = true;
+        state.energy = clamp(state.energy + 30, 0, 100);
+        state.hunger = clamp(state.hunger - 6, 0, 100);
+        setMessage('Good night... 🌙', '💤');
+        spawnParticles(140, 148, '#4080a0', 10);
+        state.petState = 'sleeping'; state.stateTimer = 50;
+        setTimeout(function() {
+          if (state.alive) {
+            state.isSleeping = false;
+            setMessage('Good morning! ☀️', '🌅');
+            spawnParticles(140, 132, '#c0b060', 14);
+            state.petState = 'idle';
+            saveGame();
+          }
+        }, 4000);
+        break;
+      case 'clean':
+        state.health = clamp(state.health + 18, 0, 100);
+        state.happiness = clamp(state.happiness + 4, 0, 100);
+        setMessage('Sparkling clean! ✨', '🧼');
+        spawnParticles(140, 148, '#60b0b0', 16);
+        state.petState = 'idle'; state.stateTimer = 16;
+        break;
+    }
+
+    updateUI(); drawPet(); saveGame();
+    const btns = [btnFeed, btnPlay, btnSleep, btnClean];
+    btns.forEach(function(b) { b.disabled = true; });
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; });
+      state.actionCooldown = 0;
+    }, COOLDOWN_MS);
+  }
+
+  // ── Game Tick ──
+  function gameTick() {
+    if (!state.alive) return;
+
+    state.hunger = clamp(state.hunger - DECAY_RATE * 1.0, 0, 100);
+    state.happiness = clamp(state.happiness - DECAY_RATE * 0.7, 0, 100);
+    state.energy = clamp(state.energy - DECAY_RATE * 0.6, 0, 100);
+    state.health = clamp(state.health - DECAY_RATE * 0.15, 0, 100);
+
+    if (state.hunger < 15) state.health = clamp(state.health - 0.4, 0, 100);
+    if (state.happiness < 15) state.health = clamp(state.health - 0.3, 0, 100);
+    if (state.energy < 10) state.health = clamp(state.health - 0.2, 0, 100);
+
+    if (Math.random() < 0.004) state.age += 1;
+
+    if (state.energy < 8 && !state.isSleeping && state.alive) {
+      state.isSleeping = true;
+      setMessage('Zongocong fell asleep... 💤', '😴');
+      state.petState = 'sleeping'; state.stateTimer = 45;
+      setTimeout(function() {
+        if (state.alive) {
+          state.isSleeping = false;
+          setMessage('Awake again! ☀️', '🌞');
+          state.petState = 'idle';
+          saveGame();
+        }
+      }, 4000);
+    }
+
+    if (state.health <= 0 || state.hunger <= 0 || state.happiness <= 0) {
+      state.health = 0; state.alive = false;
+      deathOverlay.classList.add('show');
+      setMessage('💔 Zongocong has passed...', '😢');
+      updateUI(); drawPet(); saveGame();
+      return;
+    }
+
+    if (state.stateTimer > 0) {
+      state.stateTimer--;
+      if (state.stateTimer === 0 && state.petState !== 'sleeping') state.petState = 'idle';
+    }
+
+    state.blinkTimer++;
+    if (state.blinkTimer > 100 + randInt(0, 50)) {
+      state.isBlinking = true; state.eyeOpen = 0;
+      setTimeout(function() { state.isBlinking = false; state.eyeOpen = 1; }, 110);
+      state.blinkTimer = 0;
+    }
+
+    state.bodyBob += 0.035;
+    updateParticles();
+
+    if (Math.random() < 0.018) {
+      const mood = getMood();
+      const msgs = {
+        happy: ['So happy! 🥰', 'Living its best life! ✨', 'Full of joy! 🌟'],
+        neutral: ['Just chilling... 😊', 'Peaceful day ☀️', 'Hmm... 🤔'],
+        hungry: ['So hungry! 🍽️', 'Need food! 🥺', 'Hungry tummy! 😿'],
+        tired: ['So sleepy... 😴', 'Need rest! 💤', 'Yawn... 🌙'],
+        sad: ['Feeling blue... 😢', 'Need a hug! 🤗', 'So lonely... 💧'],
+        sick: ['Not feeling well... 🤒', 'Need medicine! 💊', 'Achoo! 🤧'],
+      };
+      const list = msgs[mood.mood] || msgs.neutral;
+      const idx = Math.floor(Math.random() * list.length);
+      setMessage(list[idx], mood.emoji);
+    }
+
+    updateUI(); drawPet(); saveGame();
+  }
+
+  // ── Name handling ──
+  function updateName() {
+    const newName = petNameInput.value.trim() || 'Zongocong';
+    state.name = newName;
+    saveGame();
+    setMessage('Name updated! ✨', '📝');
+  }
+
+  // ── Animation loop ──
+  function animate() {
+    drawPet();
+    requestAnimationFrame(animate);
+  }
+
+  // ── Init ──
+  function init() {
+    const loaded = loadGame();
+    if (!loaded) {
+      resetToDefault();
+    } else {
+      if (!state.name) state.name = 'Zongocong';
+      petNameInput.value = state.name;
+      updateUI();
+      drawPet();
+      if (state.alive) setMessage('Welcome back, ' + state.name + '! 👋', '👋');
+      else setMessage('💔 Rest in peace...', '😢');
+      saveGame();
+    }
+
+    btnFeed.addEventListener('click', function() { doAction('feed'); });
+    btnPlay.addEventListener('click', function() { doAction('play'); });
+    btnSleep.addEventListener('click', function() { doAction('sleep'); });
+    btnClean.addEventListener('click', function() { doAction('clean'); });
+    canvas.addEventListener('click', function() { doAction('play'); });
+
+    btnReset.addEventListener('click', function() {
+      if (confirm('Start a new life? Current progress will be lost.')) resetToDefault();
+    });
+    btnResetDeath.addEventListener('click', resetToDefault);
+
+    petNameInput.addEventListener('change', updateName);
+    petNameInput.addEventListener('blur', updateName);
+    editNameBtn.addEventListener('click', function() { petNameInput.focus(); petNameInput.select(); });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'f' || e.key === 'F') doAction('feed');
+      if (e.key === 'p' || e.key === 'P') doAction('play');
+      if (e.key === 's' || e.key === 'S') doAction('sleep');
+      if (e.key === 'c' || e.key === 'C') doAction('clean');
+      if (e.key === 'r' || e.key === 'R') {
+        if (confirm('Start a new life?')) resetToDefault();
+      }
+    });
+
+    setInterval(gameTick, TICK_MS);
+    setInterval(saveGame, SAVE_INTERVAL_MS);
+    animate();
+
+    console.log('🌟 ZongoCong Tamagotchi loaded!');
+    console.log('🎮 Feed(F) Play(P) Sleep(S) Clean(C) Reset(R)');
+    console.log('💾 Auto-saved to localStorage!');
+  }
+
+  init();
+})();
+</script>
+
+  </body>
+</html>
